@@ -1,4 +1,5 @@
 import '../../../core/enums/chat_messag_type.dart';
+import 'business_in_chat.dart';
 
 class Message {
   final String? fileUrl;
@@ -7,12 +8,14 @@ class Message {
   final String? avatarUrl;
   final bool isUser;
   final String message;
+  final List<BusinessInChat> businessData;
 
   Message(
       {this.fileUrl,
       this.audioPath,
       this.avatarUrl,
       required this.type,
+        required this.businessData,
       required this.isUser,
       required this.message});
 
@@ -26,12 +29,15 @@ class Message {
   }
 
   factory Message.fromJson(Map<String, dynamic> json) {
+    final jsonList = json['data'] as List<dynamic>;
+    final businessData = jsonList.map((item) => BusinessInChat.fromJson(item)).toList();
     return Message(
-        message: json['text'],
-        isUser: json['is_user'],
-        avatarUrl: json['avatar_url'],
-        fileUrl: json['file_url'],
-        type: json['type'] //Flag: incorrect programming
+        message: json['message'],
+        isUser: false,
+        avatarUrl: null,
+        fileUrl: null,
+        type: ChatMessageType.text,
+        businessData: businessData
         );
   }
 }

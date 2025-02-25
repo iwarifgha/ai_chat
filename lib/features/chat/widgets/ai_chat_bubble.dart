@@ -1,16 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../model/business_in_chat.dart';
+import 'business_container.dart';
+
 
 class ChatBotBubble extends StatefulWidget {
   const ChatBotBubble({
     super.key,
     required this.message,
     required this.avatarUrl,
+    required this.businesses,
   });
 
   final String message;
   final String avatarUrl;
+  final List<BusinessInChat> businesses;
+
 
   @override
   State<ChatBotBubble> createState() => _ChatBotBubbleState();
@@ -84,6 +90,16 @@ class _ChatBotBubbleState extends State<ChatBotBubble> with TickerProviderStateM
                             style: TextStyle(
                               color: Colors.black87
                             )),
+                        if (widget.businesses.isNotEmpty)
+                          Column(
+                            spacing: 10,
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(widget.businesses.length,
+                                    (index) {
+                                  final business = widget.businesses[index];
+                                  return BusinessDataContainer(business: business);
+                                }),
+                          )
                       ],
                     ),
                   ),

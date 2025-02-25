@@ -9,7 +9,7 @@ import '../widgets/ai_chat_bubble.dart';
 import '../widgets/user_chat_bubble.dart';
 
 class ChatView extends ConsumerStatefulWidget {
-  static final path = 'chat_view';
+  static final path = '/chat_view';
 
   const ChatView({super.key});
 
@@ -20,12 +20,14 @@ class ChatView extends ConsumerStatefulWidget {
 class _ChatViewState extends ConsumerState<ChatView> {
   final TextEditingController _chatController = TextEditingController();
 
-   @override
+  @override
   Widget build(BuildContext context) {
-     final state = ref.watch(chatStateProvider);
-     final messages = ref.watch(chatStateProvider.select((state) => state.messages));
+    final state = ref.watch(chatStateProvider);
+    final messages =
+        ref.watch(chatStateProvider.select((state) => state.messages));
+    final theme = ref.read(chatStateProvider.notifier).themeMode;
 
-     return Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
@@ -48,21 +50,22 @@ class _ChatViewState extends ConsumerState<ChatView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Switch(
+                      value: theme == ThemeMode.dark,
+                      onChanged: (val) {
+                        ref.read(chatStateProvider.notifier).toggleTheme(val);
+                      }),
                   Row(
                     children: [
                       Icon(Icons.logo_dev),
                       Text(
                         ' Chat  ',
-                        style: TextStyle(
-                          color: Colors.grey.shade400
-                        ),
+                        style: TextStyle(color: Colors.grey.shade400),
                       ),
                     ],
                   ),
                   InkWell(
-                    onTap: () {
-
-                    },
+                    onTap: () {},
                     child: Icon(Icons.menu_open_rounded),
                   ),
                 ],
@@ -73,9 +76,9 @@ class _ChatViewState extends ConsumerState<ChatView> {
             Expanded(
               child: Container(
                 margin:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.white,
@@ -96,16 +99,14 @@ class _ChatViewState extends ConsumerState<ChatView> {
                         Center(
                           child: Text(
                             'What are you looking for?',
-                            style: TextStyle(
-                              color: Colors.black87
-                            ),
+                            style: TextStyle(color: Colors.black87),
                           ),
                         )
                       else
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount:  messages.length,
+                          itemCount: messages.length,
                           itemBuilder: (context, index) {
                             final message = messages[index];
                             if (message.isUser) {
@@ -125,6 +126,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
                                 child: ChatBotBubble(
                                   message: message.message,
                                   avatarUrl: message.avatarUrl ?? '',
+                                  businesses: message.businessData,
                                 ),
                               );
                             }
@@ -166,7 +168,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
       ),
       bottomNavigationBar: Padding(
         padding:
-        EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
@@ -179,9 +181,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: InkWell(
-                    onTap: () {},
-                    child: Icon(Icons.attach_file)),
+                child: InkWell(onTap: () {}, child: Icon(Icons.attach_file)),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -195,15 +195,17 @@ class _ChatViewState extends ConsumerState<ChatView> {
               ),
               const SizedBox(width: 8),
               InkWell(
-                onTap: () {},
-                child: Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: Icon(Icons.mic)
-               )),
+                  onTap: () {},
+                  child: Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: Icon(Icons.mic))),
               const SizedBox(width: 8),
               InkWell(
-                onTap:()  {
-                 ref.read(chatStateProvider.notifier).sendQuery(message: _chatController.text, type: ChatMessageType.text);
+                onTap: () {
+                  ref.read(chatStateProvider.notifier).sendQuery(
+                      message: _chatController.text,
+                      type: ChatMessageType.text);
+                  _chatController.clear();
                 },
                 child: Container(
                   height: 28,
@@ -211,7 +213,8 @@ class _ChatViewState extends ConsumerState<ChatView> {
                   decoration: BoxDecoration(
                       shape: BoxShape.circle, color: Colors.deepPurple),
                   margin: const EdgeInsets.only(top: 12),
-                  child: Icon(Icons.arrow_upward_outlined,
+                  child: Icon(
+                    Icons.arrow_upward_outlined,
                     color: Colors.white,
                     size: 18,
                   ),
@@ -221,6 +224,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
           ),
         ),
       ),
-    );;
+    );
+    ;
   }
 }

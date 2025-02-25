@@ -1,0 +1,2 @@
+const String bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDA2OTM1NzEsInVzZXJfaWQiOiJiZDA1ZmQ1NC1iZGEwLTRlZmMtOTdjNi1kMDViZThhOGQ5MzMiLCJhdmF0YXIiOm51bGx9.t6HGDwigCeOs5IKJrmb-4YgjfKvNPo6SkT2Ugh2v6hE';
+const String baseUrl = 'https://chatter-backend-dev.azurewebsites.net/api/v1';

@@ -1,9 +1,11 @@
 
 import 'package:ai_chat/features/chat/repository/chat_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/enums/chat_messag_type.dart';
 import '../../../core/helpers/catch_error.dart';
+import '../../../core/services/ai_service.dart';
 import '../model/message.dart';
 
 //--------STATE-------//
@@ -41,6 +43,17 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
   ChatStateNotifier({required this.chatRepository})
       : super(ChatState(messages: []));
 
+
+  ThemeMode _themeMode = ThemeMode.light;
+
+  ThemeMode get themeMode => _themeMode;
+
+  toggleTheme(bool isDark) {
+    _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    state = state.copyWith(messages: _messages);
+  }
+
+
   //SENDS A QUERY TO THE AI. I.E TEXT OR FILE QUERIES.
   Future<void> sendQuery({required String message,
     required ChatMessageType type}) async {
@@ -50,7 +63,8 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
     _messages.add(Message(
         isUser: true,
         message: message,
-        type: type));
+        type: type,
+        businessData: []));
 
     state = state.copyWith(messages: _messages, isLoading: true);
     try {
@@ -59,11 +73,14 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
       );
       if (response != null) {
         final message = response.message;
+        final data = response.businessData;
         //Add AI response to list
         _messages.add(Message(
             isUser: false,
             message: message,
-            type: ChatMessageType.text));
+            type: ChatMessageType.text,
+            businessData: data
+        ));
 
         state = state.copyWith(messages: _messages, isLoading: false);
       }
@@ -76,7 +93,7 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
 
 }
 
-final chatRepositoryProvider = Provider((_) => ChatRepository());
+final chatRepositoryProvider = Provider((_) => ChatRepository(AiService()));
 
 final chatStateProvider = StateNotifierProvider<ChatStateNotifier, ChatState>(
     (ref) => ChatStateNotifier(

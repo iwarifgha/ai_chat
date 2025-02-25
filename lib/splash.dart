@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashView extends StatefulWidget {
-  static final path = 'splash';
+  static final path = '/splash';
   const SplashView({super.key});
 
   @override
