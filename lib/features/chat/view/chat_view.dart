@@ -1,4 +1,5 @@
 import 'package:ai_chat/core/enums/chat_messag_type.dart';
+import 'package:ai_chat/features/chat/widgets/recording_wave.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +20,30 @@ class ChatView extends ConsumerStatefulWidget {
 
 class _ChatViewState extends ConsumerState<ChatView> {
   final TextEditingController _chatController = TextEditingController();
+
+
+
+  @override
+  initState() {
+    super.initState();
+    _initSpeech();
+  }
+
+  _initSpeech() async {
+    await ref.read(chatStateProvider.notifier).initializeVoiceService();
+  }
+
+  _sendQuery() {
+    final state = ref.watch(chatStateProvider);
+    if (state.isRecording == true) {
+      ref.read(chatStateProvider.notifier).stopVoiceSessionAndSendQuery();
+    }
+    ref
+        .read(chatStateProvider.notifier)
+        .sendRegularQuery(message: _chatController.text, type: ChatMessageType.text);
+    _chatController.clear();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +157,6 @@ class _ChatViewState extends ConsumerState<ChatView> {
                             }
                           },
                         ),
-
                       // Loading Indicator at the Bottom
                       if (state.isLoading)
                         Align(
@@ -179,40 +203,53 @@ class _ChatViewState extends ConsumerState<ChatView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: InkWell(onTap: () {}, child: Icon(Icons.attach_file)),
-              ),
+              state.isRecording == true
+                  ? IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () {}, // Implement delete action
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child:
+                          InkWell(onTap: () {}, child: Icon(Icons.attach_file,)),
+                    ),
               const SizedBox(width: 8),
               Expanded(
-                child: CustomTextField(
-                  fillColor: Colors.white,
-                  hintText: 'What’s on your mind?',
-                  controller: _chatController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: double.maxFinite.floor(),
-                ),
+                child: state.isRecording == true
+                    ? RecordingWave()
+                    : CustomTextField(
+                        fillColor: Colors.white,
+                        hintText: 'What’s on your mind?',
+                        controller: _chatController,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: double.maxFinite.floor(),
+                      ),
               ),
               const SizedBox(width: 8),
-              InkWell(
-                  onTap: () {},
-                  child: Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: Icon(Icons.mic))),
+              state.isRecording == false
+                  ? InkWell(
+                      onTap: () {
+                        state.voiceServiceEnabled == true
+                            ? ref
+                                .read(chatStateProvider.notifier)
+                                .startVoiceSession()
+                            : null;
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child: Icon(Icons.mic)))
+                  : SizedBox.shrink(),
               const SizedBox(width: 8),
               InkWell(
                 onTap: () {
-                  ref.read(chatStateProvider.notifier).sendQuery(
-                      message: _chatController.text,
-                      type: ChatMessageType.text);
-                  _chatController.clear();
+                  _sendQuery();
                 },
                 child: Container(
                   height: 28,
                   width: 28,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle, color: Colors.deepPurple),
-                  margin: const EdgeInsets.only(top: 12),
+                  margin: const EdgeInsets.only(top: 5),
                   child: Icon(
                     Icons.arrow_upward_outlined,
                     color: Colors.white,
