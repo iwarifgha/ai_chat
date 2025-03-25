@@ -55,11 +55,16 @@ class VoiceNoteService {
 
 
   Future<void> startListening({required Function(String) onResult}) async {
-    _speechToText.listen(onResult:(result) {
-      onResult(result.recognizedWords);
-      // if (result.finalResult == true){
-      // }
-    });
+    try {
+      _speechToText.listen(onResult: (result) {
+        if (result.finalResult == true && result.recognizedWords.trim().isNotEmpty) {
+          onResult(result.recognizedWords);
+        }
+        return;
+      });
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> stopListening() async {

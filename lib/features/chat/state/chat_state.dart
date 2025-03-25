@@ -11,8 +11,8 @@ import '../model/message.dart';
 //--------STATE-------//
 class ChatState {
   final List<Message> messages;
-  final bool isLoading;
-  final bool isRecording;
+  bool isLoading;
+  bool isRecording;
   final bool voiceServiceEnabled;
   final String? errorMessage;
 
@@ -51,23 +51,18 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
       {required this.voiceNoteService, required this.chatRepository})
       : super(ChatState(messages: []));
 
-  ThemeMode _themeMode = ThemeMode.light;
-
-  ThemeMode get themeMode => _themeMode;
-
-  toggleTheme(bool isDark) {
-    _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-    state = state.copyWith(messages: _messages);
-  }
 
   //SENDS A QUERY TO THE AI
-  Future<void> sendRegularQuery(
-      {required String message, required ChatMessageType type}) async {
+  Future<void> sendRegularQuery({required String message}) async {
+    print('sending regular query');
     state = state.copyWith(messages: _messages, isLoading: true);
 
     //add user message to the list
-    _messages.add(
-        Message(isUser: true, message: message, type: type, businessData: []));
+    _messages.add(Message(
+        isUser: true,
+        message: message,
+        type: ChatMessageType.text,
+        businessData: []));
 
     state = state.copyWith(messages: _messages, isLoading: true);
     try {
@@ -109,12 +104,13 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
   }
 
   String _recognizedWords = '';
-  String get recognizedWords => _recognizedWords;
+
+
   Future<void> startVoiceSession() async {
     state = state.copyWith(isRecording: true);
     try {
       //Start voice recorder
-     // await voiceNoteService.startRecorder();
+      // await voiceNoteService.startRecorder();
       //Start speech listener
       await voiceNoteService.startListening(onResult: (text) async {
         print('recorded text $text');
@@ -127,25 +123,32 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
   }
 
   Future<void> stopVoiceSessionAndSendQuery() async {
-    print('send voice query called');
-    // state = state.copyWith(messages: _messages, isLoading: true);
+    print('sending regular query');
     await voiceNoteService.stopListening();
-    //final audioPath = await voiceNoteService.stopRecorder();
-    if (//audioPath != null &&
-        _recognizedWords.isNotEmpty) {
-      //add user message to the list
-      _messages.add(Message(
-          //audioPath: audioPath,
-          isUser: true,
-          message: recognizedWords,
-          type: ChatMessageType.text,
-          businessData: []));
-      state = state.copyWith(
-          messages: _messages, isLoading: true, isRecording: false);
+
+    if (_recognizedWords.trim().isEmpty) {
+      print('No valid speech detected, ignoring empty message.');
+      state = state.copyWith(isRecording: false); // Reset recording state
+      return;
     }
+
+    // Store message and reset _recognizedWords immediately
+    final userMessage = _recognizedWords;
+    _recognizedWords = '';
+
+    //add user message to the list
+    _messages.add(Message(
+        //audioPath: audioPath,
+        isUser: true,
+        message: userMessage,
+        type: ChatMessageType.text,
+        businessData: []));
+
+    state = state.copyWith(
+        messages: _messages, isLoading: true, isRecording: false);
     try {
       final response = await chatRepository.sendQuery(
-        _recognizedWords,
+        userMessage,
       );
       if (response != null) {
         final message = response.message;

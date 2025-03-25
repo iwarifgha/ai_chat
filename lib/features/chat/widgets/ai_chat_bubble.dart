@@ -1,9 +1,9 @@
+import 'package:ai_chat/core/constants/colors/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../model/business_in_chat.dart';
 import 'business_container.dart';
-
 
 class ChatBotBubble extends StatefulWidget {
   const ChatBotBubble({
@@ -17,12 +17,12 @@ class ChatBotBubble extends StatefulWidget {
   final String avatarUrl;
   final List<BusinessInChat> businesses;
 
-
   @override
   State<ChatBotBubble> createState() => _ChatBotBubbleState();
 }
 
-class _ChatBotBubbleState extends State<ChatBotBubble> with TickerProviderStateMixin {
+class _ChatBotBubbleState extends State<ChatBotBubble>
+    with TickerProviderStateMixin {
   late final Animation<Offset> positionAnimation;
   late final AnimationController positionAnimationController;
 
@@ -37,7 +37,7 @@ class _ChatBotBubbleState extends State<ChatBotBubble> with TickerProviderStateM
         vsync: this, duration: Duration(milliseconds: 1500));
     positionAnimation = Tween<Offset>(begin: Offset(0, 1), end: Offset.zero)
         .animate(CurvedAnimation(
-        parent: positionAnimationController, curve: Curves.easeInOut));
+            parent: positionAnimationController, curve: Curves.easeInOut));
     fadeAnimation =
         Tween<double>(begin: 0, end: 1).animate(fadeAnimationController);
 
@@ -48,7 +48,7 @@ class _ChatBotBubbleState extends State<ChatBotBubble> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final bubbleColor = Colors.white;
+    final bubbleColor = kColorPrimary;
     return SlideTransition(
       position: positionAnimation,
       child: FadeTransition(
@@ -67,7 +67,7 @@ class _ChatBotBubbleState extends State<ChatBotBubble> with TickerProviderStateM
                   boxShadow: [
                     BoxShadow(
                       offset: const Offset(0, 3),
-                      color:  Colors.grey.shade100,
+                      color: kColorGrey.shade100,
                       blurRadius: 9.4,
                     ),
                   ]),
@@ -76,10 +76,7 @@ class _ChatBotBubbleState extends State<ChatBotBubble> with TickerProviderStateM
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   //AI avatar
-                  CircleAvatar(
-                    radius: 15,
-                    child: Icon(Icons.logo_dev)
-                  ),
+                  CircleAvatar(radius: 15, child: Icon(Icons.logo_dev)),
                   const SizedBox(width: 8),
 
                   //Text message
@@ -87,18 +84,16 @@ class _ChatBotBubbleState extends State<ChatBotBubble> with TickerProviderStateM
                     child: Column(
                       children: [
                         Text(widget.message,
-                            style: TextStyle(
-                              color: Colors.black87
-                            )),
+                            style: TextStyle(color: kColorWhite)),
                         if (widget.businesses.isNotEmpty)
                           Column(
                             spacing: 10,
                             mainAxisSize: MainAxisSize.min,
                             children: List.generate(widget.businesses.length,
-                                    (index) {
-                                  final business = widget.businesses[index];
-                                  return BusinessDataContainer(business: business);
-                                }),
+                                (index) {
+                              final business = widget.businesses[index];
+                              return BusinessDataContainer(business: business);
+                            }),
                           )
                       ],
                     ),
@@ -114,26 +109,28 @@ class _ChatBotBubbleState extends State<ChatBotBubble> with TickerProviderStateM
                 children: [
                   GestureDetector(
                     child: SizedBox(
-                        height: 15,
-                        width: 15,
-                        child:  Icon(Icons.thumb_up_sharp)),
-                    onTap: (){},
+                        height: 10,
+                        width: 10,
+                        child: Icon(Icons.thumb_up_alt_outlined,
+                            color: kColorWhite)),
+                    onTap: () {},
                   ),
-
                   GestureDetector(
                     child: SizedBox(
-                        height: 15,
-                        width: 15,
-                        child: Icon(Icons.thumb_down_sharp)),
-                    onTap: (){},
+                        height: 10,
+                        width: 10,
+                        child: Icon(
+                          Icons.thumb_down_off_alt_sharp,
+                          color: kColorWhite,
+                        )),
+                    onTap: () {},
                   ),
-
                   GestureDetector(
                     child: SizedBox(
-                        height: 15,
-                        width: 15,
-                        child:  Icon(Icons.copy)),
-                    onTap: (){},
+                        height: 10,
+                        width: 10,
+                        child: Icon(Icons.copy, color: kColorWhite)),
+                    onTap: () {},
                   ),
                 ],
               ),

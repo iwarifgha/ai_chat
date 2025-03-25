@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ai_chat/core/constants/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/enums/chat_messag_type.dart';
@@ -25,7 +26,7 @@ class UserBubble extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
      // Colors based on the message owner
-    final bubbleColor = Colors.deepPurple;
+    final bubbleColor =  kColorPrimary;
 
     return Column(
       crossAxisAlignment:
@@ -38,15 +39,9 @@ class UserBubble extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             decoration: BoxDecoration(
                 color: bubbleColor,
+              border: Border.all(color: kColorCyanAccent),
                 borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.white),
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 3),
-                    color: Colors.grey.shade100,
-                    blurRadius: 9.4,
                   ),
-                ]),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -59,7 +54,7 @@ class UserBubble extends ConsumerWidget {
                         Text(
                           message!,
                           style: TextStyle(
-                            color: Colors.black87
+                            color: kColorWhite
                           ),
                         ),
                       if (fileUrl != null)
@@ -73,7 +68,7 @@ class UserBubble extends ConsumerWidget {
                 const SizedBox(width: 8),
                 CircleAvatar(
                   radius: 15,
-                   backgroundColor: Colors.grey ,
+                   backgroundColor: kColorGrey ,
                 ),
               ],
             ),
@@ -89,7 +84,7 @@ class UserBubble extends ConsumerWidget {
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(0, 3),
-                    color: Colors.grey.shade100,
+                    color: kColorGrey.shade100,
                     blurRadius: 9.4,
                   ),
                 ]),
@@ -102,7 +97,7 @@ class UserBubble extends ConsumerWidget {
                 Text(
                   '$message',
                   style: TextStyle(
-                    color: Colors.black
+                    color: kColorWhite
                   ),
                 )
               ],

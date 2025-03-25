@@ -1,3 +1,5 @@
+import 'package:ai_chat/core/constants/colors/colors.dart';
+import 'package:ai_chat/core/theme/theme_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -70,6 +72,7 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
+    final theme = ThemeManager.getTheme(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: TextFormField(
@@ -88,7 +91,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         maxLength: widget.maxLength,
         focusNode: widget.focusNode,
         style: widget.style ??
-            TextStyle(color: Colors.black87),
+            theme.textTheme.bodyLarge,
         onTap: widget.onTap,
         onChanged: widget.onChanged,
         autofillHints: const [AutofillHints.email],

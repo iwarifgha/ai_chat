@@ -12,4 +12,7 @@ class ChatRepository {
       return message;
     });
   }
+
+  //save conversation
+  //get conversation
 }
