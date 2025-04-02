@@ -1,5 +1,5 @@
 import 'package:ai_chat/core/services/local/user_pref.dart';
-import 'package:ai_chat/core/theme/theme_constants.dart';
+import 'package:ai_chat/core/constants/theme/theme_constants.dart';
 import 'package:ai_chat/features/theme/repository/theme_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,9 +30,9 @@ class ThemeState {
 
 
 //STATE NOTIFIER
-class ThemeNotifier extends StateNotifier<ThemeState> {
+class ThemeStateNotifier extends StateNotifier<ThemeState> {
   final ThemeRepository themeRepository;
-  ThemeNotifier({required this.themeRepository})
+  ThemeStateNotifier({required this.themeRepository})
       : super(ThemeState(
             themeModel: ThemeModel(themeData: ThemeManager.light, isDarkMode: false))) {
     _loadSavedTheme();
@@ -41,11 +41,11 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
   bool get isDarkMode => state.themeModel.isDarkMode;
 
   Future<void> _loadSavedTheme() async {
-    final isDarkMode = await themeRepository.getSavedTheme();
-    state = state.copyWith(
+    final currentThemeIsDark = await themeRepository.getSavedTheme();
+      state = state.copyWith(
       themeModel: ThemeModel(
-        themeData: isDarkMode ? ThemeManager.dark : ThemeManager.light,
-        isDarkMode: isDarkMode,
+        themeData: currentThemeIsDark ? ThemeManager.dark : ThemeManager.light,
+        isDarkMode: currentThemeIsDark,
       ),
     );
   }
@@ -66,6 +66,6 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
 final themeRepositoryProvider = Provider((_) => ThemeRepository(UserPreferences()));
 
 final themeStateProvider =
-StateNotifierProvider<ThemeNotifier, ThemeState>((ref) {
-  return ThemeNotifier(themeRepository: ref.watch(themeRepositoryProvider));
+StateNotifierProvider<ThemeStateNotifier, ThemeState>((ref) {
+  return ThemeStateNotifier(themeRepository: ref.watch(themeRepositoryProvider));
 });

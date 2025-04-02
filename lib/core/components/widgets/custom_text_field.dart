@@ -1,5 +1,4 @@
-import 'package:ai_chat/core/constants/colors/colors.dart';
-import 'package:ai_chat/core/theme/theme_constants.dart';
+import 'package:ai_chat/core/constants/theme/theme_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -90,8 +89,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         minLines: widget.minLines ?? 1,
         maxLength: widget.maxLength,
         focusNode: widget.focusNode,
-        style: widget.style ??
-            theme.textTheme.bodyLarge,
+        style: widget.style ?? theme.textTheme.bodyLarge,
         onTap: widget.onTap,
         onChanged: widget.onChanged,
         autofillHints: const [AutofillHints.email],
@@ -103,16 +101,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
           filled: true,
           labelText: widget.labelText,
           suffixIconConstraints:
-          const BoxConstraints(maxHeight: 40, minWidth: 5),
+              const BoxConstraints(maxHeight: 40, minWidth: 5),
           errorText: widget.errorText,
           border: InputBorder.none,
           focusedBorder: widget.enableFocusBorder
               ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: widget.borderColor ?? Colors.deepPurple,
-            ),
-          )
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: widget.borderColor ?? Colors.deepPurple,
+                  ),
+                )
               : InputBorder.none,
           hintText: widget.hintText,
           hintStyle: TextStyle(color: Colors.grey.shade100),

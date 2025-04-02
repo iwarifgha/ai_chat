@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/theme/theme_constants.dart';
+import '../../../core/constants/theme/theme_constants.dart';
 import '../state/theme_state.dart';
 
 class ThemeModeView extends ConsumerWidget {

@@ -1,7 +1,7 @@
 import 'package:ai_chat/core/constants/textstyles/text_styles.dart';
 import 'package:flutter/material.dart';
 
-import '../constants/colors/colors.dart';
+import '../colors/colors.dart';
 
 class ThemeManager{
  static final ThemeData dark = ThemeData(

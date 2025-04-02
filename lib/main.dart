@@ -1,5 +1,3 @@
-import 'package:ai_chat/core/theme/theme_constants.dart';
-import 'package:ai_chat/features/chat/state/chat_state.dart';
 import 'package:ai_chat/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

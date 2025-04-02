@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/colors/colors.dart';
-import '../../../core/theme/theme_constants.dart';
+import '../../../core/constants/theme/theme_constants.dart';
 
 class MenuSlider extends ConsumerWidget {
   const MenuSlider({

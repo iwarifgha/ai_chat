@@ -1,5 +1,5 @@
 import 'package:ai_chat/core/constants/colors/colors.dart';
-import 'package:ai_chat/core/theme/theme_constants.dart';
+import 'package:ai_chat/core/constants/theme/theme_constants.dart';
 import 'package:ai_chat/features/chat/widgets/recording_wave.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

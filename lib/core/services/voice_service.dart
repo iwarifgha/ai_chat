@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -41,12 +40,8 @@ class VoiceNoteService {
 
   Future<String?> stopRecorder() async {
     String? path = await _soundRecorder.stop();
-    if(path != null){
-      return path;
-    } else {
-      throw Exception('Path is null');
+    return path;
     }
-  }
 
   disposeRecorder() async {
     await _soundRecorder.dispose();
