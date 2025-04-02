@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../model/business_in_chat.dart';
@@ -153,7 +152,10 @@ class BusinessDataContainer extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
+
             /// 📌 **Review Section**
             Padding(
               padding: const EdgeInsets.all(5.0),
@@ -191,6 +193,7 @@ class BusinessDataContainer extends StatelessWidget {
                       ]),
                     ),
                   ),
+
                   /// **Review Star**
                   Container(
                     height: 35,
@@ -209,6 +212,7 @@ class BusinessDataContainer extends StatelessWidget {
                       }),
                     ),
                   ),
+
                   /// **Opening Hours**
                   Flexible(
                     child: Container(
@@ -224,10 +228,15 @@ class BusinessDataContainer extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text.rich(TextSpan(children: [
-                               TextSpan(
-                                 text: 'Open 24hours',
-                                 style: Theme.of(context).textTheme.labelMedium
-                                     ?.copyWith(color: Colors.green.shade400, fontSize:10),)
+                              TextSpan(
+                                text: 'Open 24hours',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                        color: Colors.green.shade400,
+                                        fontSize: 10),
+                              )
                             ])),
                           ),
                         ],

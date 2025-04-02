@@ -1,5 +1,4 @@
 import 'package:ai_chat/core/constants/colors/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../model/business_in_chat.dart';
